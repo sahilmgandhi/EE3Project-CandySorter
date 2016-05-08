@@ -15,7 +15,7 @@ int baseBlue = 0;
 
 int threshConst = 30;
 
-int delayV = 100;
+int delayV = 200;
 
 void setup() {
   // put your setup code here, to run once:
@@ -36,6 +36,8 @@ void goToThreshold()
   {
     digitalWrite(RED_LED, HIGH);      // Callibrate the red
     red = analogRead(A4);
+    Serial.print("Red threshold is: ");
+    Serial.println(red);
     thresholdRed[0] += red;
     delay(delayV);
     digitalWrite(4, LOW);
@@ -55,61 +57,66 @@ void goToThreshold()
   thresholdRed[0]/= threshConst;
   thresholdRed[1]/= threshConst;
   thresholdRed[2]/= threshConst;
-  //<------------->
-    // use the servo to turn the thing once 45 degrees
-  //<------------->
-  
-  for (int i = 0; i < threshConst; i++)
-  {
-    digitalWrite(RED_LED, HIGH);      // Callibrate the green
-    red = analogRead(A4);
-    thresholdGreen[0] += red;
-    delay(delayV);
-    digitalWrite(4, LOW);
-    delay(delayV);
-    digitalWrite(5, HIGH);
-    green = analogRead(A4);
-    thresholdGreen[1] += green;
-    delay(delayV);
-    digitalWrite(5, LOW);
-    delay(delayV);
-    digitalWrite(6, HIGH);
-    blue = analogRead(A4);
-    thresholdGreen[2] += blue;
-    delay(delayV);
-    digitalWrite(6, LOW);
-  }
-  thresholdGreen[0]/= threshConst;
-  thresholdGreen[1]/= threshConst;
-  thresholdGreen[2]/= threshConst;
 
+  Serial.println(thresholdRed[0]);
+  Serial.println(thresholdRed[1]);
+  Serial.println(thresholdRed[2]);
+  
   //<------------->
     // use the servo to turn the thing once 45 degrees
   //<------------->
   
-  for (int i = 0; i < threshConst; i++)
-  {
-    digitalWrite(RED_LED, HIGH);      // Callibrate the blue
-    red = analogRead(A4);
-    thresholdBlue[0] += red;
-    delay(delayV);
-    digitalWrite(4, LOW);
-    delay(delayV);
-    digitalWrite(5, HIGH);
-    green = analogRead(A4);
-    thresholdBlue[1] += green;
-    delay(delayV);
-    digitalWrite(5, LOW);
-    delay(delayV);
-    digitalWrite(6, HIGH);
-    blue = analogRead(A4);
-    thresholdBlue[2] += blue;
-    delay(delayV);
-    digitalWrite(6, LOW);
-  }
-  thresholdBlue[0]/= threshConst;
-  thresholdBlue[1]/= threshConst;
-  thresholdBlue[2]/= threshConst;
+//  for (int i = 0; i < threshConst; i++)
+//  {
+//    digitalWrite(RED_LED, HIGH);      // Callibrate the green
+//    red = analogRead(A4);
+//    thresholdGreen[0] += red;
+//    delay(delayV);
+//    digitalWrite(4, LOW);
+//    delay(delayV);
+//    digitalWrite(5, HIGH);
+//    green = analogRead(A4);
+//    thresholdGreen[1] += green;
+//    delay(delayV);
+//    digitalWrite(5, LOW);
+//    delay(delayV);
+//    digitalWrite(6, HIGH);
+//    blue = analogRead(A4);
+//    thresholdGreen[2] += blue;
+//    delay(delayV);
+//    digitalWrite(6, LOW);
+//  }
+//  thresholdGreen[0]/= threshConst;
+//  thresholdGreen[1]/= threshConst;
+//  thresholdGreen[2]/= threshConst;
+//
+//  //<------------->
+//    // use the servo to turn the thing once 45 degrees
+//  //<------------->
+//  
+//  for (int i = 0; i < threshConst; i++)
+//  {
+//    digitalWrite(RED_LED, HIGH);      // Callibrate the blue
+//    red = analogRead(A4);
+//    thresholdBlue[0] += red;
+//    delay(delayV);
+//    digitalWrite(4, LOW);
+//    delay(delayV);
+//    digitalWrite(5, HIGH);
+//    green = analogRead(A4);
+//    thresholdBlue[1] += green;
+//    delay(delayV);
+//    digitalWrite(5, LOW);
+//    delay(delayV);
+//    digitalWrite(6, HIGH);
+//    blue = analogRead(A4);
+//    thresholdBlue[2] += blue;
+//    delay(delayV);
+//    digitalWrite(6, LOW);
+//  }
+//  thresholdBlue[0]/= threshConst;
+//  thresholdBlue[1]/= threshConst;
+//  thresholdBlue[2]/= threshConst;
 }
 
 void loop() {
@@ -127,34 +134,65 @@ void loop() {
    *      
    * Compare the red and the blue with the green. If it is similar to both of those, then it is a green colored      
    */
-  
+  currentColor[0] = 0;
+  currentColor[1] = 0;
+  currentColor[2] = 0;
   digitalWrite(RED_LED, HIGH);
-  int red, blue, green;
+  int red = 0;
+  int blue = 0;
+  int green = 0;
+
   for (int i = 0; i < threshConst; i++)
   {
+    digitalWrite(RED_LED, HIGH);     
     red = analogRead(A4);
-    currentColor[0] += red; 
+    currentColor[0] += red;
     delay(5);
+    digitalWrite(4, LOW);
+    delay(5);
+    digitalWrite(5, HIGH);
+    green = analogRead(A4);
+    currentColor[1] += green;
+    delay(5);
+    digitalWrite(5, LOW);
+    delay(5);
+    digitalWrite(6, HIGH);
+    blue = analogRead(A4);
+    currentColor[2] += blue;
+    delay(5);
+    digitalWrite(6, LOW);
   }
-  digitalWrite(RED_LED, LOW);
-  currentColor[0] /= threshConst;
+  currentColor[0]/= threshConst;
+  currentColor[1]/= threshConst;
+  currentColor[2]/= threshConst;
+  
+//  for (int i = 0; i < 15; i++)
+//  {
+//    red = analogRead(A4);
+//    Serial.println(red);
+//    currentColor[0] += red; 
+//    delay(10);
+//  }
+//  digitalWrite(RED_LED, LOW);
+//  currentColor[0] /= 15;
 
-  bool isRed = compareRed(currentColor[0]);
+  bool isRed = false;
+  isRed = compareRed(currentColor[0]);
   bool isBlue = false;
   bool isGreen = false;
   delay(delayV);
-  if (!isRed)
-  {
-      digitalWrite(BLUE_LED, HIGH);
-      for (int i = 0; i < threshConst; i++)
-      {
-        blue = analogRead(A4);
-        currentColor[1] += blue; 
-        delay(5);
-      }
-      currentColor[1] /= threshConst;
-      isBlue = compareBlue(currentColor[1]);
-  }
+//  if (!isRed)
+//  {
+//      digitalWrite(BLUE_LED, HIGH);
+//      for (int i = 0; i < threshConst; i++)
+//      {
+//        blue = analogRead(A4);
+//        currentColor[2] += blue; 
+//        delay(5);
+//      }
+//      currentColor[2] /= threshConst;
+//      isBlue = compareBlue(currentColor[2]);
+//  }
 
   digitalWrite(BLUE_LED, LOW);
   if (isRed)
@@ -163,29 +201,6 @@ void loop() {
     Serial.println("The object is blue");
   else
     Serial.println("The object is green");
-    
-//  
-//  int baseRed = analogRead(LED_RECEIVER);
-//
-//  Serial.print("Red light is ");
-//  Serial.println(baseRed);
-//  delay(250);
-//  digitalWrite(RED_LED, LOW);
-//  delay(250);
-//  digitalWrite(GREEN_LED, HIGH);
-//  baseGreen = analogRead(LED_RECEIVER);
-//  Serial.print("Green light is ");
-//  Serial.println(baseGreen);
-//  delay(250);
-//  digitalWrite(GREEN_LED, LOW);
-//  delay(250);
-//  digitalWrite(BLUE_LED, HIGH);
-//  baseBlue = analogRead(LED_RECEIVER);
-//  Serial.print("Blue light is ");
-//  Serial.println(baseBlue);
-//  delay(250);
-//  digitalWrite(BLUE_LED, LOW);
-//  delay(250);
 }
 
 bool compareRed(int currRed)
