@@ -117,9 +117,6 @@ void loop() {
    *      
    * Compare the red and the blue with the green. If it is similar to both of those, then it is a green colored      
    */
-
-  digitalWrite(RED_LED, 
-  
   
   digitalWrite(RED_LED, HIGH);
 
@@ -146,3 +143,4 @@ void loop() {
   digitalWrite(BLUE_LED, LOW);
   delay(250);
 }
+
