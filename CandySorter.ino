@@ -7,212 +7,70 @@ int thresholdRed [] = {0,0,0};
 int thresholdGreen [] = {0,0,0};
 int thresholdBlue [] = {0,0,0};
 
-int currentColor [] = {0,0,0};
-
-int baseRed = 0;
-int baseGreen = 0;
-int baseBlue = 0;
-
 int threshConst = 30;
-
+int flashConst = 5;
+int delayFlash = 100;
 int delayV = 50;
 
-void setup() {
-  // put your setup code here, to run once:
- pinMode(GREEN_LED, OUTPUT);
- pinMode(RED_LED, OUTPUT);
- pinMode(BLUE_LED, OUTPUT);
- pinMode(LED_RECEIVER, INPUT);
- Serial.begin(9600);
-
- goToThreshold();
+void setup(){
+    pinMode(GREEN_LED, OUTPUT);
+    pinMode(RED_LED, OUTPUT);
+    pinMode(BLUE_LED, OUTPUT);
+    pinMode(LED_RECEIVER, INPUT);
+    Serial.begin(9600);
+    getColorBaseline();                    // so either the color has to meet the baseline, OR it is the least
 }
 
-void goToThreshold()
-{
-  int red, blue, green;
-//
-//  for (int i = 0; i < threshConst; i++)
-//  {
-//    digitalWrite(RED_LED, HIGH);      // Callibrate the red
-//    red = analogRead(A4);
-//    Serial.print("Red threshold is: ");
-//    Serial.println(red);
-//    thresholdRed[0] += red;
-//    delay(delayV);
-//    digitalWrite(4, LOW);
-//    delay(delayV);
-//    digitalWrite(5, HIGH);
-//    green = analogRead(A4);
-//    thresholdRed[1] += green;
-//    delay(delayV);
-//    digitalWrite(5, LOW);
-//    delay(delayV);
-//    digitalWrite(6, HIGH);
-//    blue = analogRead(A4);
-//    thresholdRed[2] += blue;
-//    delay(delayV);
-//    digitalWrite(6, LOW);
-//  }
-//  thresholdRed[0]/= threshConst;
-//  thresholdRed[1]/= threshConst;
-//  thresholdRed[2]/= threshConst;
-//  
-//  //<------------->
-//    // use the servo to turn the thing once 45 degrees
-//  //<------------->
-//  
-//  for (int i = 0; i < threshConst; i++)
-//  {
-//    digitalWrite(RED_LED, HIGH);      // Callibrate the green
-//    red = analogRead(A4);
-//    thresholdGreen[0] += red;
-//    delay(delayV);
-//    digitalWrite(4, LOW);
-//    delay(delayV);
-//    digitalWrite(5, HIGH);
-//    green = analogRead(A4);
-//    thresholdGreen[1] += green;
-//    delay(delayV);
-//    digitalWrite(5, LOW);
-//    delay(delayV);
-//    digitalWrite(6, HIGH);
-//    blue = analogRead(A4);
-//    thresholdGreen[2] += blue;
-//    delay(delayV);
-//    digitalWrite(6, LOW);
-//  }
-//  thresholdGreen[0]/= threshConst;
-//  thresholdGreen[1]/= threshConst;
-//  thresholdGreen[2]/= threshConst;
-//
-//  //<------------->
-//    // use the servo to turn the thing once 45 degrees
-//  //<------------->
-//  
-//  for (int i = 0; i < threshConst; i++)
-//  {
-//    digitalWrite(RED_LED, HIGH);      // Callibrate the blue
-//    red = analogRead(A4);
-//    thresholdBlue[0] += red;
-//    delay(delayV);
-//    digitalWrite(4, LOW);
-//    delay(delayV);
-//    digitalWrite(5, HIGH);
-//    green = analogRead(A4);
-//    thresholdBlue[1] += green;
-//    delay(delayV);
-//    digitalWrite(5, LOW);
-//    delay(delayV);
-//    digitalWrite(6, HIGH);
-//    blue = analogRead(A4);
-//    thresholdBlue[2] += blue;
-//    delay(delayV);
-//    digitalWrite(6, LOW);
-//  }
-//  thresholdBlue[0]/= threshConst;
-//  thresholdBlue[1]/= threshConst;
-//  thresholdBlue[2]/= threshConst;
+void getColorBaseline(){
+    // get the baseline of each color (if that is even required ... maybe not if the M&M will be so close)
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  // now here we have to compare everything to the thresholds. 
-
-  // Pseudocode:
-  /*
-   * Collect the red, green, and blue. Store it into currentColor
-   * Compare the red with the redThreshold, blueThreshold, Greenthreshold reds 
-   *      - if it is equal to the redThreshold, then it is a red color
-   * Compare the blue with the 3 thresholds
-   *      - if it is equal to the blueThreshold (or around it, we can do plus of minus 5), then it is a blue color
-   *      
-   * Compare the red and the blue with the green. If it is similar to both of those, then it is a green colored      
-   */
-  currentColor[0] = 0;
-  currentColor[1] = 0;
-  currentColor[2] = 0;
-
+void loop(){
   int red = 0;
   int blue = 0;
   int green = 0;
 
-  for (int i = 0; i < threshConst; i++)
+  for (int i = 0; i < flashConst; i++)
   {
-    analogWrite(RED_LED, 120);     
+    analogWrite(RED_LED, 120);
+    delay(3);     
     red = analogRead(A4);
-    currentColor[0] += red;
-    delay(500);
+    //Serial.println(red);
+    delay(delayFlash);
     analogWrite(RED_LED, 0);
-    delay(500);
     analogWrite(GREEN_LED, 120);
+    delay(3);   
     green = analogRead(A4);
-    currentColor[1] += green;
-    delay(500);
+    //Serial.println(green);
+    delay(delayFlash);
     analogWrite(GREEN_LED, 0);
-    delay(500);
     analogWrite(BLUE_LED, 120);
+    delay(3);   
     blue = analogRead(A4);
-    currentColor[2] += blue;
-    delay(500);
+    //Serial.println(blue);
+    delay(delayFlash);
     analogWrite(BLUE_LED, 0);
+    //Serial.println();
+    delay(delayFlash);
   }
-  currentColor[0]/= threshConst;
-  currentColor[1]/= threshConst;
-  currentColor[2]/= threshConst;
 
-  Serial.print("The current red color is : ");
-  Serial.println(currentColor[0]);
-  Serial.print("The current green color is: ");
-  Serial.println(currentColor[1]);
-  Serial.print("The current blue color is: ");
-  Serial.println(currentColor[2]);
-  
-  
   bool isRed = false;
-  isRed = compareRed(currentColor[0]);
-  bool isBlue = false;
   bool isGreen = false;
-  delay(delayV);
-  if (!isRed)
-  {
-      isBlue = compareBlue(currentColor[2]);
-  }
+  bool isBlue = false;
 
-  if (isRed == true)
-    Serial.println("The object is red");
-  else if (isBlue == true)
-    Serial.println("The object is blue");
+  if (red < green && red < blue)
+    isRed = true;
+  else if (blue < red && blue < green)
+    isBlue = true;
   else
-    Serial.println("The object is green");
+    isGreen = true;
 
-  delay(1000);
-}
-
-bool compareRed(int currRed)
-{
-    Serial.print("The current red color is : ");
-    Serial.println(currRed);
-    Serial.print("the threshold red color is : ");
-    Serial.println(thresholdRed[0]);
-    if ((currRed <= 687) && (currRed >= 682))
-       return true;
-//    if(currRed <= thresholdRed[0] + 5 && currRed >= thresholdRed[0] - 5)
-//      return true;
-    return false;    
-}
-
-bool compareBlue(int currBlue)
-{
-    Serial.print("The current blue color is : ");
-    Serial.println(currBlue);
-    Serial.print("the threshold blue color is : ");
-    Serial.println(thresholdBlue[2]);
-    if (currBlue <= 687 && currBlue >= 682)
-        return true;
-//    if (currBlue <= thresholdBlue[2] + 2 && currBlue >= thresholdBlue[2] - 2)
-//      return true;
-    return false;
+  if (isRed)
+    Serial.println("The color is Red");
+  else if (isBlue)
+    Serial.println("The color is Blue");
+  else if (isGreen)
+    Serial.println("The color is Green");
+  
 }
 
