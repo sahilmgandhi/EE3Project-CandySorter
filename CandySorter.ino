@@ -32,27 +32,31 @@ void loop(){
 
   for (int i = 0; i < flashConst; i++)
   {
-    analogWrite(RED_LED, 120);
+    analogWrite(RED_LED, 150);
     delay(3);     
     red = analogRead(A4);
-    //Serial.println(red);
+    Serial.println(red);
     delay(delayFlash);
     analogWrite(RED_LED, 0);
-    analogWrite(GREEN_LED, 120);
+    analogWrite(GREEN_LED, 150);
     delay(3);   
     green = analogRead(A4);
-    //Serial.println(green);
+    Serial.println(green);
     delay(delayFlash);
     analogWrite(GREEN_LED, 0);
-    analogWrite(BLUE_LED, 120);
+    analogWrite(BLUE_LED, 150);
     delay(3);   
     blue = analogRead(A4);
-    //Serial.println(blue);
+    Serial.println(blue);
     delay(delayFlash);
     analogWrite(BLUE_LED, 0);
-    //Serial.println();
+    Serial.println();
     delay(delayFlash);
   }
+
+  red /= flashConst;
+  blue /= flashConst;
+  green /= flashConst;
 
   bool isRed = false;
   bool isGreen = false;
