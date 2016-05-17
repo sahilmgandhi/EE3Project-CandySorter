@@ -1,19 +1,17 @@
-#define RED_LED 9
-#define GREEN_LED 10
-#define BLUE_LED 11
+#define RED_LED 3
+#define GREEN_LED 5
+#define BLUE_LED 6
 #define LED_RECEIVER A4                     // long side is negative
 
+#include <Servo.h>
+Servo ramp;
 
-
-int delayV = 30;
-int flashConst = 15;
+int delayV = 20;
+int flashConst = 20;
 int delayFlash = 10;
 
-int currentColor[] = {0, 0, 0};
-int redRange[] = {30, 0, 0};
-int blueRange[] ={0,0,0}; 
-
 void setup(){
+    ramp.attach(9);
     pinMode(GREEN_LED, OUTPUT);
     pinMode(RED_LED, OUTPUT);
     pinMode(BLUE_LED, OUTPUT);
@@ -34,6 +32,27 @@ void loop(){
 
   for (int i = 0; i < flashConst; i++)  //make sure to not count the first few because values need to stabilize
   {
+    if (i > 0 && i < 6)
+    {
+      analogWrite(RED_LED, 200);
+    delay(delayV);     
+    
+    delay(delayFlash);
+    analogWrite(RED_LED, 0);
+    analogWrite(GREEN_LED, 200);
+    delay(delayV);       
+   
+    delay(delayFlash);
+    analogWrite(GREEN_LED, 0);
+    analogWrite(BLUE_LED, 200);
+    delay(delayV);       
+    
+    delay(delayFlash);
+    analogWrite(BLUE_LED, 0);
+   
+    delay(delayFlash);
+    continue;
+    }
     analogWrite(RED_LED, 200);
     delay(delayV);     
     red += analogRead(A4);
@@ -114,16 +133,35 @@ Serial.println();
 
   
 
-  if (isRed)
+ if (isRed)
+  {
     Serial.println("The color is Red");
+    ramp.write(0);
+  }
   else if(isYellow)
+  {
     Serial.println("The color is Yellow");
+    ramp.write(45);
+  }
   else if (isBlue)
-    Serial.println("The color is Blue");
-  else if (isGreen)
-    Serial.println("The color is Green");
-   else if(isBrown)
+  {
     Serial.println("The color is Brown");
+    ramp.write(90);
+  }
+  else if (isGreen)
+  {
+    Serial.println("The color is Green");
+    ramp.write(135);
+  }
+  else if(isBrown)
+  {
+    Serial.println("The color is Brown");
+    ramp.write(90);
+  }
   else if(isOrange)
+  {
     Serial.println("The color is Orange");
+    ramp.write(180);
+  }
+  delay(500);
   }
