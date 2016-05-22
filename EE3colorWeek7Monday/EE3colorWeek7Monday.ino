@@ -7,7 +7,7 @@
 Servo ramp;
 
 int delayV = 20;
-int flashConst = 20;
+int flashConst = 30;
 int delayFlash = 10;
 
 void setup(){
@@ -32,7 +32,7 @@ void loop(){
 
   for (int i = 0; i < flashConst; i++)  //make sure to not count the first few because values need to stabilize
   {
-    if (i > 0 && i < 6)
+    if (i < 6)
     {
       analogWrite(RED_LED, 200);
     delay(delayV);     
@@ -109,7 +109,7 @@ Serial.println();
   if(errorRG < 0)
     errorRG *= -1;
 
-  if(blue < 10 && red < 10 && green < 10)
+  if(blue < 10 && red < 9 && green < 10)
     isBrown = true;
 
   else if(blue > 20)
@@ -123,7 +123,7 @@ Serial.println();
 
   else if (red > green && red > blue)
 
-    if(red > 15)
+    if(red > 13)
       isOrange = true;
     else
      isRed =true;

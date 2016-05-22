@@ -17,9 +17,17 @@ int pos;    // variable to store the servo position
 void setup() {
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
   Serial.begin(9600);
+  myservo.write(90);
 }
 
 void loop() {
+
+myservo.write(0);
+delay(200);
+myservo.write(180);
+delay(200);
+
+
 //  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
 //    // in steps of 1 degree
 //    myservo.write(pos);              // tell servo to go to position in variable 'pos'
@@ -31,17 +39,17 @@ void loop() {
 //    delay(50);                       // waits 15ms for the servo to reach the position
 //  }
 
-    int rand1 = random()%3;
-
-    Serial.println(rand1);
-    if (rand1 == 0)
-      myservo.write(2);
-    else if (rand1 == 1)
-      myservo.write(90);
-    else
-      myservo.write(179);
-
-    Serial.println(myservo.read());
-    delay(1000);
+//    int rand1 = random()%3;
+//
+//    Serial.println(rand1);
+//    if (rand1 == 0)
+//      myservo.write(2);
+//    else if (rand1 == 1)
+//      myservo.write(90);
+//    else
+//      myservo.write(179);
+//
+//    Serial.println(myservo.read());
+//    delay(1000);
 }
 
