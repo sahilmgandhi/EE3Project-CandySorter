@@ -6,6 +6,8 @@
 #include <Servo.h>
 Servo ramp;
 
+Servo piston;
+
 int delayV = 20;
 int flashConst = 30;
 int delayFlash = 10;
@@ -17,7 +19,9 @@ void setup(){
     pinMode(BLUE_LED, OUTPUT);
     pinMode(LED_RECEIVER, INPUT);
     Serial.begin(9600);
-                      // so either the color has to meet the baseline, OR it is the least
+
+    //piston.attach(10);  ?? will this work ... technically shouldn't work since no pwm on pin 10 ... but same as above with pin 9
+    //piston.write(0);
 }
 
 
@@ -123,7 +127,7 @@ Serial.println();
 
   else if (red > green && red > blue)
 
-    if(red > 13)
+    if(red > 17)                        // change this value based on what it tells in class ... we just need to re-callibrate this every time ... =(
       isOrange = true;
     else
      isRed =true;
@@ -163,5 +167,9 @@ Serial.println();
     Serial.println("The color is Orange");
     ramp.write(180);
   }
+
+  // piston.write(179);         // code to make the piston push the candy forward and then retract
+  //delay(400);
+  // piston.write(1);
   delay(500);
-  }
+}
