@@ -9,7 +9,7 @@ Servo ramp;
 Servo piston;
 
 int delayV = 20;
-int flashConst = 30;
+int flashConst = 40;
 int delayFlash = 10;
 
 void setup(){
@@ -20,8 +20,8 @@ void setup(){
     pinMode(LED_RECEIVER, INPUT);
     Serial.begin(9600);
 
-    //piston.attach(10);  ?? will this work ... technically shouldn't work since no pwm on pin 10 ... but same as above with pin 9
-    //piston.write(0);
+    piston.attach(10);  //?? will this work ... technically shouldn't work since no pwm on pin 10 ... but same as above with pin 9
+    piston.write(0);
 }
 
 
@@ -113,7 +113,7 @@ Serial.println();
   if(errorRG < 0)
     errorRG *= -1;
 
-  if(blue < 10 && red < 9 && green < 10)
+  if(blue < 10 && red < 10 && green < 10)
     isBrown = true;
 
   else if(blue > 20)
@@ -168,8 +168,9 @@ Serial.println();
     ramp.write(180);
   }
 
-  // piston.write(179);         // code to make the piston push the candy forward and then retract
-  //delay(400);
-  // piston.write(1);
-  delay(500);
+  piston.write(160);         // code to make the piston push the candy forward and then retract
+  delay(1000);
+  piston.write(1);
+  delay(1000);
+  piston.write(160);
 }
