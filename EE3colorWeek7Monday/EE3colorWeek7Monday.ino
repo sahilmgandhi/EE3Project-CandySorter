@@ -9,7 +9,7 @@ Servo ramp;
 Servo piston;
 
 int delayV = 20;
-int flashConst = 40;
+int flashConst = 20;
 int delayFlash = 10;
 
 void setup(){
@@ -36,7 +36,7 @@ void loop(){
 
   for (int i = 0; i < flashConst; i++)  //make sure to not count the first few because values need to stabilize
   {
-    if (i < 6)
+    if (i < 4)
     {
       analogWrite(RED_LED, 200);
     delay(delayV);     
@@ -169,8 +169,8 @@ Serial.println();
   }
 
   piston.write(160);         // code to make the piston push the candy forward and then retract
-  delay(1000);
+  delay(700);
   piston.write(1);
-  delay(1000);
+  delay(700);
   piston.write(160);
 }
